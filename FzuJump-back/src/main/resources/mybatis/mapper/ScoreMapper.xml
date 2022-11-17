@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.Ambition.mapper.ScoreMapper">
+
+    <select id="GetAllScore" resultType="com.Ambition.pojo.Score">
+        select * from fzujump.score
+        inner join fzujump.role
+        on score.userRoleId = role.id
+    </select>
+
+    <select id="GetScoreBy" resultType="com.Ambition.pojo.Score">
+        select * from  fzujump.score
+        inner join fzujump.role
+        on score.userRoleId = role.id
+        where score.userName like #{userName}
+    </select>
+
+    <update id="updateScore" parameterType="com.Ambition.pojo.Score">
+        update fzujump.score
+        <trim prefix="set" suffixOverrides=",">
+            <if test="userName!=null"> username=#{userName},</if>
+            <if test="userRole!=null"> userRoleId=#{userRole},</if>
+            <if test="ItemNumber!=null"> itemNumber=#{ItemNumber},</if>
+            <if test="JumpFrequency!=null"> jumpFrequency=#{JumpFrequency},</if>
+        </trim>
+        WHERE id=#{id};
+    </update>
+
+    <delete id="deleteScore">
+        delete from fzujump.score where id = #{id}
+    </delete>
+
+    <insert id="addScore" parameterType="com.Ambition.pojo.Score">
+        insert into fzujump.score
+        (userName, userRoleId, JumpFrequency, ItemNumber)
+        values (#{userName}, #{userRole},#{JumpFrequency}, #{ItemNumber})
+    </insert>
+
+</mapper>
