@@ -1,5 +1,6 @@
 package com.Ambition.controller;
 
+import com.Ambition.Utils.Code;
 import com.Ambition.Utils.Constant;
 import com.Ambition.dto.ResultData;
 import com.Ambition.service.PermissionService;
@@ -31,8 +32,7 @@ public class RoleController {
     })
     @GetMapping("/role/showRole")
     public ResultData show(@RequestParam(required = false, defaultValue = "1") int pageNo){
-    //    System.out.println(roleService.GetAllRole());
-        PageHelper.startPage(pageNo, Constant.LIMIT);
+        PageHelper.startPage(pageNo,Constant.LIMIT);
         return roleService.GetAllRole();
     }
 
@@ -56,6 +56,7 @@ public class RoleController {
 
     @ApiOperation("修改角色")
     @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "header", name = "token", value = "登录令牌", dataType = "String", dataTypeClass = String.class,required = true),
             @ApiImplicitParam(name = "data", value = "json对象{permissionIdList:[],roleId:}", required = true),
     })
     @PostMapping("/role/update")
@@ -70,6 +71,7 @@ public class RoleController {
 
     @ApiOperation("删除角色")
     @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "header", name = "token", value = "登录令牌", dataType = "String", dataTypeClass = String.class,required = true),
             @ApiImplicitParam(name = "roleId", value = "角色ID", required = true, dataType = "Integer",dataTypeClass = Integer.class),
     })
     @GetMapping("/role/delete")

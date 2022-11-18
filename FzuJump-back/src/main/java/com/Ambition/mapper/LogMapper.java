@@ -8,4 +8,8 @@ import java.util.List;
 @Mapper
 public interface LogMapper {
     List<Log> getAllLog();
+
+    void addLog(String message);
+
+    void deleteLog(Integer id);
 }

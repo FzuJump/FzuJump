@@ -24,19 +24,20 @@ public class UserController {
     @Resource
     private UserService userService;
 
-    @ApiOperation("显示员工列表")
+    @ApiOperation("显示用户列表")
     @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "header", name = "token", value = "登录令牌", dataType = "String", dataTypeClass = String.class,required = true),
             @ApiImplicitParam(name = "pageNo", value = "页数", required = true, dataType = "Integer", dataTypeClass = Integer.class)
     })
     @GetMapping("/user/show")
     public ResultData show(@RequestParam(required = false, defaultValue = "1") Integer pageNo){
-        //  System.out.println(userService.GetAllUser());
-        PageHelper.startPage(pageNo, 10);
+        PageHelper.startPage(pageNo,  Constant.LIMIT);
         return userService.GetAllUser();
     }
 
-    @ApiOperation("单个删除员工")
+    @ApiOperation("单个删除用户")
     @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "header", name = "token", value = "登录令牌", dataType = "String", dataTypeClass = String.class,required = true),
             @ApiImplicitParam(name = "userId", value = "用户id", required = true, dataType = "Integer", dataTypeClass = Integer.class),
             @ApiImplicitParam(name = "pageNo", value = "页数", required = true, dataType = "Integer", dataTypeClass = Integer.class)
     })
@@ -49,7 +50,7 @@ public class UserController {
         return resultData1;
     }
 
-    @ApiOperation("添加员工")
+    @ApiOperation("添加用户")
     @PostMapping("/user/add")
     public ResultData insertUser(@RequestBody User user) {
         return userService.insertUser(user);
@@ -63,6 +64,7 @@ public class UserController {
 
     @ApiOperation("条件查询")
     @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "header", name = "token", value = "登录令牌", dataType = "String", dataTypeClass = String.class,required = true),
             @ApiImplicitParam(name = "data", value = "json对象{username:,roleId:,pageNo:}两个属性可以只传一个", required = true)
     })
     @PostMapping("/user/search")

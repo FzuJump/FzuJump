@@ -1,6 +1,7 @@
 package com.Ambition.service.impl;
 
 import com.Ambition.Utils.Code;
+import com.Ambition.Utils.MailerServiceImpl;
 import com.Ambition.dto.ResultData;
 import com.Ambition.mapper.RoleMapper;
 import com.Ambition.mapper.UserMapper;
@@ -8,6 +9,7 @@ import com.Ambition.pojo.Role;
 import com.Ambition.pojo.User;
 import com.Ambition.service.UserService;
 import com.github.pagehelper.PageInfo;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -25,6 +27,9 @@ public class UserServiceImpl  implements UserService {
     @Resource
     private RoleMapper roleMapper;
 
+    @Resource
+    private MailerServiceImpl mailerService;
+
 
     public User GetUserBy(String userCode, String password){
         User user = userMapper.GetUserBy(null,userCode, password);
@@ -33,8 +38,7 @@ public class UserServiceImpl  implements UserService {
     public ResultData GetAllUser(){
         ResultData<Map> resultData = new ResultData<>();
         List<User> users = userMapper.GetAllUser();
-        //PageInfo<查询到的数据类型> pages = new PageInfo<>(list类型, 页面显示的导航条数);
-        PageInfo<User> pages = new PageInfo<>(users);
+        PageInfo<User> pages = new PageInfo<>(users,3);
         HashMap<String, Object> map = new HashMap<>();
         map.put("total", pages.getTotal());
         map.put("pages", pages.getPages());
@@ -71,7 +75,7 @@ public class UserServiceImpl  implements UserService {
         ResultData resultData = new ResultData();
         User user1 = userMapper.GetUserBy(user.getId(),null, null);
         BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
-        if(!user.getPassword().equals(user.getPassword())){
+        if(!user.getPassword().equals(user1.getPassword())){
             if(user.getPassword()!= null && !user.getPassword().equals("")){
                 user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
             }
@@ -120,5 +124,10 @@ public class UserServiceImpl  implements UserService {
         resultData.setCode(Code.SUCCESS);
         resultData.setMsg("成功删除" + number + "条数据");
         return resultData;
+    }
+    @Async
+    public void Email(String value ,Integer userId,String email){
+        mailerService.sendSimpleTextMailActual("福大跳跃",value,new String[]{email},null,null,null);
+        return;
     }
 }

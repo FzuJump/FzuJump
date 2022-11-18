@@ -11,6 +11,6 @@ public class Constant {
     /**
      * 分页查询每页显示的数量
      */
-    public static int LIMIT = 8;
+    public static int LIMIT = 10;
 
 }

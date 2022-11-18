@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.util.HashMap;
 import java.util.Objects;
+import java.util.concurrent.TimeUnit;
 
 @Service
 public class LoginServiceImpl implements LoginServcie {
@@ -51,7 +52,7 @@ public class LoginServiceImpl implements LoginServcie {
         String token = JwtUtil.createJWT(String.valueOf(userId));
         System.out.println(token);
         ////authenticate存入redis
-        redisCache.setCacheObject("user"+userId,loginUser);
+        redisCache.setCacheObject("user"+userId,loginUser,1, TimeUnit.HOURS);
         //返回
         ResultData resultData = new ResultData();
         resultData.setCode(Code.SUCCESS);

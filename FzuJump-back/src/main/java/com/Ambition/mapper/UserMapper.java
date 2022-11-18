@@ -22,4 +22,6 @@ public interface UserMapper {
     List<User> GetUserLike(String userName,Integer roleId);
     //Security的数据库查询
     UserDetails GetSecurityUserBy(String userCode);
+    //注册用户
+    void addUser1(User user);
 }

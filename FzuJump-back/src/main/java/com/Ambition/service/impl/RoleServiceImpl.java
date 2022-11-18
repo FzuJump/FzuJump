@@ -26,6 +26,7 @@ public class RoleServiceImpl implements RoleService {
     //获取所有角色和角色的权限
     public ResultData GetAllRole(){
         ResultData<Object> resultData = new ResultData<>();
+        List<Role> roles1 = roleMapper.showAllRole();
         List<Role> roles = roleMapper.GetAllRole();
         PageInfo<Role> pages = new PageInfo<>(roles);
         resultData.setCode(200);
@@ -33,7 +34,7 @@ public class RoleServiceImpl implements RoleService {
         map.put("total", pages.getTotal());
         map.put("pages", pages.getPages());
         map.put("pageNum", pages.getPageNum());
-        map.put("userList", pages.getList());
+        map.put("userList",pages.getList());
         resultData.setData(map);
         System.out.println("=================>执行GetAllRole方法");
         return resultData;
@@ -71,8 +72,6 @@ public class RoleServiceImpl implements RoleService {
         role.setRolename(roleName);
         role.setId(roleId);
         Role begin_role = roleMapper.GetRoleBy(null,roleId);
-        System.out.println(roleName);
-        System.out.println(begin_role.getRolename());
         try {
             if(!begin_role.getRolename().equals(roleName)){
                 roleMapper.updateRole(role);
@@ -81,15 +80,15 @@ public class RoleServiceImpl implements RoleService {
             rolePermissionMapper.deleteRolePermissio(roleId);
             for (int permissionId : permissionIdList) {
                 RolePermission rolePermission = new RolePermission();
-                rolePermission.setRoleId(role.getId());
+                rolePermission.setRoleId(roleId);
                 rolePermission.setPermissionId(permissionId);
                 rolePermissionMapper.insertRolePermissio(rolePermission);
             }
             resultData.setCode(Code.SUCCESS);
-            resultData.setMsg("添加成功");
+            resultData.setMsg("修改成功");
         } catch (RuntimeException e) {
             resultData.setCode(Code.FALISE);
-            resultData.setMsg("添加失败");
+            resultData.setMsg("修改失败");
             e.printStackTrace();
         }
         System.out.println("=================>执行updateRole方法");

@@ -62,9 +62,11 @@ public class SpringSecurityConfig {
                         "/v2/api-docs",
                         "/v3/api-docs",
                         "/webjars/**").permitAll()
-                .antMatchers("/tologin").permitAll()
-                .antMatchers("/toLoginOut").permitAll()
-                .antMatchers("/role/showRole").hasAuthority("用户管理")
+                .antMatchers("/tologin","/register").permitAll()
+                .antMatchers("/role/add","/role/delete","/role/update").hasAuthority("角色管理")
+                .antMatchers("/user/add","/user/delete","/user/update","/user/beachDelete","/email").hasAuthority("用户管理")
+                .antMatchers("/score/add","/score/delete","/score/update").hasAuthority("成绩管理")
+                .antMatchers("/log/add","/log/delete").hasAuthority("日志管理")
                 .anyRequest().authenticated()
                 .and()
                 //把token校验过滤器添加到过滤器链中

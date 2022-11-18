@@ -21,20 +21,21 @@ public class ScoreController {
 
     @ApiOperation("修改成绩")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "id", value = "商品id", required = true, dataType = "Integer", dataTypeClass = Integer.class),
-            @ApiImplicitParam(name = "goodsName", value = "商品名", required = true, dataType = "String", dataTypeClass = String.class),
-            @ApiImplicitParam(name = "name", value = "类型名", required = true, dataType = "String", dataTypeClass = String.class),
-            @ApiImplicitParam(name = "goodsDesc", value = "商品描述", required = true, dataType = "String", dataTypeClass = String.class),
-            @ApiImplicitParam(name = "shelfLife", value = "保质期", required = true, dataType = "Integer", dataTypeClass = Integer.class),
+            @ApiImplicitParam(paramType = "header", name = "token", value = "登录令牌", dataType = "String", dataTypeClass = String.class,required = true),
+            @ApiImplicitParam(name = "id", value = "用户id", required = true, dataType = "Integer", dataTypeClass = Integer.class),
+            @ApiImplicitParam(name = "userName", value = "用户名", required = true, dataType = "String", dataTypeClass = String.class),
+            @ApiImplicitParam(name = "jumpFrequency", value = "跳跃高度", required = true, dataType = "Integer", dataTypeClass = Integer.class),
+            @ApiImplicitParam(name = "itemNumber", value = "拾取道具数", required = true, dataType = "Integer", dataTypeClass = Integer.class),
     })
     @GetMapping("/score/update")
-    public ResultData updateGoods(int id, String userName, String rolename, int jumpFrequency, int itemNumber) {
-        return scoreService.updateScore(id, userName, rolename, jumpFrequency, itemNumber);
+    public ResultData updateGoods(Integer id, String userName, Integer jumpFrequency, Integer itemNumber) {
+        return scoreService.updateScore(id, userName,  jumpFrequency, itemNumber);
     }
 
     @ApiOperation("搜索用户成绩")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "goodsName", value = "商品名", required = true, dataType = "String", dataTypeClass = String.class)
+            @ApiImplicitParam(paramType = "header", name = "token", value = "登录令牌", dataType = "String", dataTypeClass = String.class,required = true),
+            @ApiImplicitParam(name = "userName", value = "用户名", required = true, dataType = "String", dataTypeClass = String.class)
     })
     @GetMapping("/score/search")
     public ResultData scoreSearch(String userName){
@@ -44,28 +45,48 @@ public class ScoreController {
 
     @ApiOperation("删除商品")
     @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "header", name = "token", value = "登录令牌", dataType = "String", dataTypeClass = String.class,required = true),
             @ApiImplicitParam(name = "pageNo", value = "页数", required = true, dataType = "Integer", dataTypeClass = Integer.class),
-            @ApiImplicitParam(name = "id", value = "商品id", required = true, dataType = "Integer", dataTypeClass = Integer.class)
+            @ApiImplicitParam(name = "id", value = "用户id", required = true, dataType = "Integer", dataTypeClass = Integer.class)
     })
     @GetMapping("/score/delete")
-    public ResultData deleteScore(@ApiParam("商品id")@RequestParam int id,@RequestParam(defaultValue = "1") int pageNo) {
+    public ResultData deleteScore(@RequestParam int id,@RequestParam(defaultValue = "1") int pageNo) {
         PageHelper.startPage(pageNo, Constant.LIMIT);
         return scoreService.deleteScore(id);
     }
 
-    @ApiOperation("添加商品")
+    @ApiOperation("添加成绩")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "header", name = "token", value = "登录令牌", dataType = "String", dataTypeClass = String.class,required = true),
+            @ApiImplicitParam(name = "userName", value = "用户姓名", required = true, dataType = "String", dataTypeClass = String.class),
+            @ApiImplicitParam(name = "rolename", value = "角色", required = true, dataType = "String", dataTypeClass = String.class),
+            @ApiImplicitParam(name = "jumpFrequency", value = "跳跃高度", required = true, dataType = "Integer", dataTypeClass = Integer.class),
+            @ApiImplicitParam(name = "itemNumber", value = "拾取道具数", required = true, dataType = "Integer", dataTypeClass = Integer.class)
+    })
     @GetMapping("/score/add")
-    public ResultData addScore(String userName, String rolename, int jumpFrequency, int itemNumber) {
+    public ResultData addScore(String userName, String rolename, Integer jumpFrequency, Integer itemNumber) {
         return scoreService.addScore(userName, rolename, jumpFrequency, itemNumber);
+    }
+
+    @ApiOperation("成绩")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "header", name = "token", value = "登录令牌", dataType = "String", dataTypeClass = String.class,required = true),
+            @ApiImplicitParam(name = "pageNo", value = "页数", required = true, dataType = "Integer", dataTypeClass = Integer.class)
+    })
+    @PostMapping("/score")
+        public ResultData score(@RequestParam(required = false, defaultValue = "1") int pageNo){
+        PageHelper.startPage(pageNo, Constant.LIMIT);
+        return scoreService.GetAllGrades(0);
     }
 
     @ApiOperation("成绩排行")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "page", value = "页数", required = true, dataType = "Integer", dataTypeClass = Integer.class)
+            @ApiImplicitParam(paramType = "header", name = "token", value = "登录令牌", dataType = "String", dataTypeClass = String.class,required = true),
+            @ApiImplicitParam(name = "pageNo", value = "页数", required = true, dataType = "Integer", dataTypeClass = Integer.class)
     })
-    @PostMapping("/score")
-    public ResultData stock(@RequestParam(required = false, defaultValue = "1") int page){
-        PageHelper.startPage(page, Constant.LIMIT);
-        return scoreService.GetAllGrades();
+    @PostMapping("/rank")
+    public ResultData stock(@RequestParam(required = false, defaultValue = "1") int pageNo){
+        PageHelper.startPage(pageNo, Constant.LIMIT);
+        return scoreService.GetAllGrades(1);
     }
 }

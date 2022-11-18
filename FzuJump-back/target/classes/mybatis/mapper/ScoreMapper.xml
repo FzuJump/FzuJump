@@ -21,7 +21,6 @@
         update fzujump.score
         <trim prefix="set" suffixOverrides=",">
             <if test="userName!=null"> username=#{userName},</if>
-            <if test="userRole!=null"> userRoleId=#{userRole},</if>
             <if test="ItemNumber!=null"> itemNumber=#{ItemNumber},</if>
             <if test="JumpFrequency!=null"> jumpFrequency=#{JumpFrequency},</if>
         </trim>
@@ -38,4 +37,10 @@
         values (#{userName}, #{userRole},#{JumpFrequency}, #{ItemNumber})
     </insert>
 
+    <select id="GetAllScoreBy" resultType="com.Ambition.pojo.Score">
+        select score.id ,score.JumpFrequency, score.userName, score.ItemNumber,rolename from fzujump.score
+        inner join fzujump.role
+        on score.userRoleId = role.id
+        order by JumpFrequency desc
+    </select>
 </mapper>

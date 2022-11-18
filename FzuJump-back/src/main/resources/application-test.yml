@@ -6,7 +6,7 @@ spring:
     host: 127.0.0.1
     port: 6379
 #    windows下密码不生效，打包时加上
-#    password: a85559681
+    password: a85559681
   datasource:
     username: root
     password: a85559681

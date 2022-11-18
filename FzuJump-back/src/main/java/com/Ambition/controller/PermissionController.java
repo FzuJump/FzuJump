@@ -18,6 +18,7 @@ public class PermissionController {
 
     @ApiOperation("获取所有权限")
     @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "header", name = "token", value = "登录令牌", dataType = "String", dataTypeClass = String.class,required = true),
             @ApiImplicitParam(name = "pageNo", value = "页数", required = true, dataType = "Integer", dataTypeClass = Integer.class),
     })
     @GetMapping("/permission/show")

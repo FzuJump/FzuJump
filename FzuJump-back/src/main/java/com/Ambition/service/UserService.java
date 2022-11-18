@@ -21,4 +21,6 @@ public interface UserService {
     ResultData searchUser(User user);
     //批量删除
     ResultData deleteUserList(List<Integer> userIdlist);
+
+    void Email(String value ,Integer userId,String email);
 }

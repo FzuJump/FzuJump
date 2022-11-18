@@ -16,4 +16,6 @@ public interface ScoreMapper {
     void deleteScore(int id);
 
     void addScore(Score score);
+
+    List<Score> GetAllScoreBy();
 }

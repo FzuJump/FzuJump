@@ -9,4 +9,11 @@
         order by createTime
     </select>
 
+    <insert id="addLog" >
+        insert into fzujump.log(message) values (#{message})
+    </insert>
+
+    <delete id="deleteLog">
+        delete  from fzujump.log where id = #{id}
+    </delete>
 </mapper>
