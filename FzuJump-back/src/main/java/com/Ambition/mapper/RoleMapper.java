@@ -19,4 +19,6 @@ public interface RoleMapper {
     void deleteRole(Integer id);
     //展示所有角色
     List<Role> showAllRole();
+    //角色数量
+    int countRole();
 }

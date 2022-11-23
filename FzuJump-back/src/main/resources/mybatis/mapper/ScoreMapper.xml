@@ -43,4 +43,8 @@
         on score.userRoleId = role.id
         order by JumpFrequency desc
     </select>
+
+    <select id="countScore" resultType="Integer">
+        select count(*) from fzujump.score
+    </select>
 </mapper>

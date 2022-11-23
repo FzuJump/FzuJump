@@ -62,7 +62,7 @@ public class SpringSecurityConfig {
                         "/v2/api-docs",
                         "/v3/api-docs",
                         "/webjars/**").permitAll()
-                .antMatchers("/tologin","/register").permitAll()
+                .antMatchers("/tologin","/register","/background/add").permitAll()
                 .antMatchers("/role/add","/role/delete","/role/update").hasAuthority("角色管理")
                 .antMatchers("/user/add","/user/delete","/user/update","/user/beachDelete","/email").hasAuthority("用户管理")
                 .antMatchers("/score/add","/score/delete","/score/update").hasAuthority("成绩管理")

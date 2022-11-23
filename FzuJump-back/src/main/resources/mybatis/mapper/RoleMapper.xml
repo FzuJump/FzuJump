@@ -57,4 +57,8 @@
     <select id="showAllRole" resultType="com.Ambition.pojo.Role">
         select * from fzujump.role
     </select>
+
+    <select id="countRole" resultType="Integer">
+        select count(*) from fzujump.role
+    </select>
 </mapper>

@@ -81,4 +81,7 @@
         insert into fzujump.user(usercode,username,password,roleId) values (#{userCode},#{userName},#{password},#{roleId})
     </insert>
 
+    <select id="countUser" resultType="Integer">
+        select count(*) from fzujump.user
+    </select>
 </mapper>

@@ -24,4 +24,6 @@ public interface UserMapper {
     UserDetails GetSecurityUserBy(String userCode);
     //注册用户
     void addUser1(User user);
+    //用户数量
+    int countUser();
 }
