@@ -42,7 +42,15 @@
     								
     					</div>
 					</div>
+					
 			</el-header>
+				<!-- <el-tag
+						v-for="tag in tags"
+						:key="tag.name"
+						closable
+						:type="tag.type">
+						{{tag.name}}
+					</el-tag> -->
 			<el-main>
 				<router-view></router-view>
 			</el-main>
@@ -55,12 +63,19 @@
 </template>
 
 <script>
-    import defaultHeadPicture from "../assets/img/PI@8NE30H5Q(GAGMKB)XY@C.jpg"
+    import defaultHeadPicture from "../assets/logo.png"
 	import http from '../util/http.js'
     export default {
         name: "All",
 		data() {
 			return {
+				tags: [
+				{ name: '标签一', type: '' },
+				{ name: '标签二', type: 'success' },
+				{ name: '标签三', type: 'info' },
+				{ name: '标签四', type: 'warning' },
+				{ name: '标签五', type: 'danger' }
+				],
 				circleUrl: defaultHeadPicture,
 				data1:[],
 				userName:"",

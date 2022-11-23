@@ -10,8 +10,14 @@ const routes = [
 		path:'/all',
 		name:'guanli',
 		component: () => import('../views/All.vue'),
-		redirect: "/all/role",
+		redirect: "/all/index",
 		children:[
+			{
+				path: '/all/index',
+				name: '首页管理',
+				icon: 'el-icon-s-home',
+				component: () => import( '../views/index.vue')
+			},
 			{
 				path: '/all/role',
 				name: '角色管理',
