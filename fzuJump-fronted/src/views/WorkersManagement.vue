@@ -5,20 +5,26 @@
 				<div class="baseOperate">
 					<el-button type="primary" @click="addForm.addFrame=true" round class="el-icon-plus">增 加</el-button>
 					<el-button type="warning" :disabled="isChecked" round @click="deleteMulti">批量删除</el-button>
-					<!-- 增加员工弹框 -->
+					<!-- 增加用户弹框 -->
 					<div id="addFrame">
 						<el-dialog title="增加用户" :visible.sync="addForm.addFrame" width="50%">
 
 							<el-form ref="form" label-width="80px" :model="addForm.worker">
 								
-								<el-alert>
+								<el-form-item label="用户账号">
+									<el-input v-model="addForm.worker.code" placeholder="请输入用户账号" clearable maxlength="12"></el-input>
+								</el-form-item>
+
 								<el-form-item label="用户名">
 									<el-input v-model="addForm.worker.name" placeholder="请输入用户名" clearable maxlength="6"></el-input>
 								</el-form-item>
 								
-								</el-alert>
 								<el-form-item label="密码">
 									<el-input v-model="addForm.worker.pwd" show-password placeholder="请输入密码" clearable maxlength="12"></el-input>
+								</el-form-item>
+
+								<el-form-item label="邮箱">
+									<el-input v-model="addForm.worker.Email" placeholder="请输入邮箱" clearable maxlength="20"></el-input>
 								</el-form-item>
 
 								<el-form-item label="设置角色">
@@ -82,18 +88,22 @@
 					</el-table-column>
 				</el-table>
 			</div>
-			<!-- 修改角色弹框 -->
+			<!-- 修改用户弹框 -->
 			<div id="modify">
 				<el-dialog title="编辑员工" :visible.sync="modifyWorker.modify" width="50%">
 			
 					<el-form ref="form" label-width="80px">
-						<el-alert>
-						<el-form-item label="员工名">
-							<el-input v-model="modifyWorker.name" placeholder="请输入员工名" clearable maxlength="6"></el-input>
+						<el-form-item label="用户账号">
+							<el-input v-model="modifyWorker.code" placeholder="请输入用户账号" clearable maxlength="6" readonly></el-input>
 						</el-form-item>
-						</el-alert>
+						<el-form-item label="用户名">
+							<el-input v-model="modifyWorker.name" placeholder="请输入用户名" clearable maxlength="6"></el-input>
+						</el-form-item>
 						<el-form-item label="密码">
 							<el-input v-model="modifyWorker.pwd" show-password placeholder="请输入密码" clearable maxlength="12"></el-input>
+						</el-form-item>
+						<el-form-item label="邮箱">
+							<el-input v-model="modifyWorker.email"  placeholder="请输入邮箱" clearable maxlength="12"></el-input>
 						</el-form-item>
 						<el-form-item label="角色">
 							<el-radio-group v-model="modifyWorker.modifyCurrentRole">
@@ -150,11 +160,13 @@
 					flag:false
 				}
 				,
-				// 增加员工所需数据
+				// 增加用户所需数据
 				addForm: {
-					// 添加的员工
+					// 添加的用户
 					worker: {
+						code:"",
 						name: "",
+						Email:"",
 						pwd: "",
 						role: ""
 					},
@@ -187,8 +199,10 @@
 					modifyRoleIndex: '',
 					// 修改角色的弹窗变量
 					modify: false,
+					code:"",
 					name: "",
 					pwd: "",
+					email:"",
 					// 修改的目标角色
 					modifyCurrentRole: ""
 				}
@@ -292,20 +306,7 @@
 				})
 			},
 
-			//////////////////////////////////////////////////////
-			// 添加
-			// watch: {
-			// 	searchInput: function(val) {
-			// 		console.log(this.searchInput);
-			// 	},
-			// 	// 监听弹窗变化使添加变为初始状态
-			// 	'addForm.addFrame': function(newV, oldV) {
-			// 		console.log(oldV);
-			// 		if (!oldV) {
-			// 			this.clearInfo()
-			// 		}
-			// 	}
-			// },
+
 
 			// 回到添加前的状态
 			clearInfo() {
@@ -315,18 +316,15 @@
 					pwd: "",
 					role: ""
 				};
-				// this.addForm.tip = {
-				// 	pIsHidden: false,
-				// 	nIsHidden: false,
-				// 	name: "",
-				// 	pwd: ""
-				// }
 			},
 
-			// 添加员工
+			// 添加用户
 			submitAdd() {
+				let flagK = validator.vCharLength(this.addForm.worker.code, 1, 12);
 				let flagN = validator.vCharLength(this.addForm.worker.name, 1, 6);
 				let flagP = validator.vCharLength(this.addForm.worker.pwd, 1, 12);
+				var verify = /^\w[-\w.+]*@([A-Za-z0-9][-A-Za-z0-9]+\.)+[A-Za-z]{2,14}/;
+				let flagM = verify.test(this.addForm.worker.Email);
 				let flagR = typeof(this.addForm.worker.role) === "number" ? true : false;
 				// 验证提交信息
 				if (!(flagN && flagP)) {
@@ -335,7 +333,19 @@
 						message: '用户名或密码格式有误！'
 					});
 					return;
-				} else if (!flagR) {
+				}else if(!flagK){
+					this.$message({
+						type: 'error',
+						message: '账号格式错误!'
+					});
+					return;
+				}else if(!flagM){
+					this.$message({
+						type: 'error',
+						message: '邮箱格式错误!'
+					});
+					return;
+				}else if (!flagR) {
 					this.$message({
 						type: 'error',
 						message: '请选择角色！'
@@ -348,6 +358,8 @@
 						method: 'post',
 						url: addWorker,
 						data: {
+							userCode: this.addForm.worker.code,
+							email:this.addForm.worker.Email,
 							password: this.addForm.worker.pwd,
 							userName: this.addForm.worker.name,
 							roleId: this.addForm.worker.role
@@ -485,6 +497,8 @@
 					modify:true,
 					name:this.workersData[val.$index].userName,
 					pwd:this.workersData[val.$index].password,
+					code:this.workersData[val.$index].userCode,
+					email:this.workersData[val.$index].email,
 					modifyCurrentRole:this.workersData[val.$index].roleId
 				}
 				console.log(this.modifyWorker.modifyCurrentRole);
@@ -507,6 +521,8 @@
 					method: 'post',
 					url: modify,
 					data: JSON.stringify({
+						userCode: this.modifyWorker.code,
+						email: this.modifyWorker.email,
 						password: this.modifyWorker.pwd,
 						userName:this.modifyWorker.name ,
 						id: this.modifyWorker.currentModifyWorker,

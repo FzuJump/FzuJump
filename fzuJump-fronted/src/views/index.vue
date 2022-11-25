@@ -5,8 +5,8 @@
 		  <div class="grid-content bg-purple" >
 			<!-- 首页user信息 -->
 			<el-card shadow= 'hover' v-car="user">
-			  <div class="userCard">
-				<el-avatar :size="150" :src=imgUrl></el-avatar>
+			  <div class="userCard" >
+				<el-avatar :size="150" :src="$store.state.Picture" ></el-avatar>
 				<div class="userInfo">
 				  <p class="important-font">{{user.username}}</p>
 				  <p class="secondary-font">{{user.rolename}}</p>
@@ -51,14 +51,15 @@
 	 
 <script>
 	 // 引入http
-	import { ClientRequest } from 'http'
 import http from '../util/http.js'
 
-
+import { mapState } from "vuex";
 	export default {
 	  name: "Index",
+	  
 	  data: function() {
 		return {
+			currentPicture:window.localStorage.getItem("Avater"),
 			countRole:0,
 			countLog:0,
 			countUser:0,
@@ -98,7 +99,11 @@ import http from '../util/http.js'
 			]
 		}
 	  },
+	  computed:{
+			...mapState(["Picture"])
+		},
 	  mounted: function(){
+		// this.currentPicture=window.localStorage.getItem("Avater");
 		http({
 				method:'get',
 				url:"/index/show",
@@ -107,7 +112,6 @@ import http from '../util/http.js'
 					}
 			}).then((res)=>{
 				if(res.data.code===200){
-					console.log("index",res.data);
 					this.user.username=res.data.data.username;
 					this.user.rolename=res.data.data.role;
 					this.countData[0].value=res.data.data.countRole;
@@ -124,8 +128,7 @@ import http from '../util/http.js'
 			})
 	  },
 	  methods:{
-		
-	  }
+		}
 	}
 	</script>
 	 
@@ -215,5 +218,6 @@ import http from '../util/http.js'
       background-color: #1d8dd8;
       color: #fff;
     }
+	
   }
 	</style>

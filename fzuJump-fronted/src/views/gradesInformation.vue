@@ -13,6 +13,8 @@
 				@selection-change="handleSelectionChange">
 					<el-table-column prop="id" label="用户id" >
 					</el-table-column>
+					<el-table-column prop="userCode" label="用户账号" >
+					</el-table-column>
 					<el-table-column prop="userName" label="用户名称" >
 					</el-table-column>
 					<el-table-column prop="rolename" label="角色" >
@@ -77,8 +79,11 @@
 			<!--        第二个用户成绩添加界面-->
 			<el-tab-pane label="添加成绩信息" name="second">
 				<div id="add" style="vertical-align: middle">
+					<span> 用户账号：</span>
+					<el-input v-model="form.userCode" placeholder="请输入用户账号" style="width:50%;margin-left: 66px;"></el-input>
+					<br>	
 					<span> 用户昵称：</span>
-					<el-input v-model="form.userName" placeholder="请输入用户账号" style="width:50%;margin-left: 66px;"></el-input>
+					<el-input v-model="form.userName" placeholder="请输入用户昵称" style="width:50%;margin-left: 66px;"></el-input>
 					<br>	
 					<span> 角色：  </span>
 					<el-select v-model="types" placeholder="请选择" style="width:50%;margin-left: 92px;">
@@ -180,7 +185,6 @@
 		methods: {
 			update(){
 				this.dialogFormVisible=false,
-
 				http({
 					method:'get',
 					url:'/score/update',
@@ -240,12 +244,28 @@
 						id:this.tableData[scope.$index].id
 					}
 				}).then((res)=>{
-					this.tableData.splice(scope.$index-1,1)
+					// this.tableData.splice(scope.$index-1,1)
 					if(res.data.code==200){
+									http({
+									method: 'post',
+									url: initGF,
+									params: {
+										pageNo: this.currentPage
+									}
+								}).then((res) => {
+									console.log(res);
+									if (res.data.code == 200) {
+										this.tableData = res.data.data.list;
+										this.total = res.data.data.total;
+									}
+								}).catch(() => {
+									alert("err")
+							})
 							this.getDataByPage(this.currentPage);
 							this.$message({
 								type: 'success',
-								message: '删除成功!'
+								message: '删除成功!',
+								
 							});
 							this.cancelModify();
 						}else{
@@ -259,19 +279,6 @@
 							type: 'error',
 							message: '服务器错误'
 						});
-					http({
-						method: 'post',
-						url: initGF,
-						params: {
-							pageNo: 1
-						}
-					}).then((res) => {
-						if (res.data.code == 200) {
-							this.tableData = res.data.data.list;
-						}
-					}).catch(() => {
-						 alert("err")
-					})
 				}).catch(()=>{
 				})
 			},
@@ -319,6 +326,7 @@
 					method:"get",
 					url:'/score/add',
 					params:{
+						userCode:this.form.userCode,
 						userName:this.form.userName,
 						jumpFrequency: this.form.jumpFrequency,
 						itemNumber: this.form.itemNumber,

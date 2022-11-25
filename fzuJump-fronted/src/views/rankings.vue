@@ -5,17 +5,18 @@
         <h1>总排行榜</h1>
         <div id="table">
             <el-table
-                    :data="tableData"
-                    style="width: 100%"
-                    :header-cell-style="{'text-align':'center'}">
-                    <el-table-column
-                        label="排名"
-                        type="index"
-                        align="center">
+                :data="tableData"
+                style="width: 100%"
+                :header-cell-style="{'text-align':'center'}">
+                <el-table-column
+                    label="排名"
+                    type="index"
+                    :index="table_index"
+                    align="center">
                 </el-table-column>
                 <el-table-column
-                        label="用户id"
-                        prop="id"
+                        label="用户账号"
+                        prop="userCode"
                         align="center">
                 </el-table-column>
                 <el-table-column
@@ -66,9 +67,6 @@
 </template>
 
 <script>
-    import {
-        stockAll
-    } from "../util/api.js";
     import http from '../util/http.js'
 
     export default {
@@ -79,22 +77,25 @@
                 search:'',
                 currentPage: 1,
                 total: 0,
+                pageSize:10,
             }
         },
         methods: {
+            table_index(index) {
+                return (this.currentPage - 1) * this.pageSize + index + 1;
+            },
             handleCurrentChange(val) {
                 http({
                     method:'post',
                     url:'/rank',
                     params:{
-                        pageNo:val
-                    }
+                        pageNo:val,
+                    },
                 }).then((res)=>{
-                    consolo.log(res)
-                    if (res.data.code == 200){
+                    this.currentPage = val;
+                    if (res.data.code === 200){
                         this.tableData = res.data.data.list;
                         this.total = res.data.data.total;
-                        console.log(this.total)
                     }else {
 							this.$message({
 								type: 'error',
@@ -143,6 +144,7 @@
                     pageNo: 1
                 }
             }).then((res) => {
+                console.log(res);
                 if (res.data.code == 200){
                         this.tableData = res.data.data.list;
                         this.total = res.data.data.total;
@@ -172,5 +174,8 @@
     #block {
         float: right;
         margin-top: 2%;
+    }
+    #block111{
+        transform:translateX(-10px);
     }
 </style>

@@ -29,13 +29,14 @@
 
 					<div class="r-content">
 						<div class="demo-basic--circle" style=" height: 60px; float: right;">
-    								<el-avatar :size="50" :src="circleUrl" style="vertical-align: middle;margin-right: 0.625rem;">
+    								<el-avatar :size="50" :src="currentPicture" style="vertical-align: middle;margin-right: 0.625rem;">
     								</el-avatar>
     								<el-dropdown>
     									<el-button type="primary" round>
     										{{userName}}<i class="el-icon-arrow-down el-icon--right"></i>
     									</el-button>
     									<el-dropdown-menu slot="dropdown">
+											<el-dropdown-item @click.native="uploadimg">更换头像</el-dropdown-item>
     										<el-dropdown-item @click.native="shutDown">注销</el-dropdown-item>
     									</el-dropdown-menu>
     								</el-dropdown>
@@ -44,6 +45,20 @@
 					</div>
 					
 			</el-header>
+			<div class="container-box">
+			<el-dialog title="上传" :visible.sync="imgupload" width="35%" style="text-align: center;">
+				<el-upload class="upload-demo" action="#" drag multiple :headers="headers" :auto-upload="false"
+				 :file-list="fileList" :on-change="handleChange">
+					<i class="el-icon-upload"></i>
+					<div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
+					<div class="el-upload__tip" slot="tip">上传jpg或png格式文件</div>
+				</el-upload>
+				<div slot="footer" class="dialog-footer">
+					<el-button @click="imgupload = false">取 消</el-button>
+					<el-button type="primary" @click="confirmUpload()">上 传</el-button>
+				</div>
+			</el-dialog>
+	</div>
 				<!-- <el-tag
 						v-for="tag in tags"
 						:key="tag.name"
@@ -63,12 +78,19 @@
 </template>
 
 <script>
+    import { mapState } from "vuex";
     import defaultHeadPicture from "../assets/logo.png"
 	import http from '../util/http.js'
     export default {
         name: "All",
 		data() {
 			return {
+				currentPicture:"",
+				fileList: [],
+				headers: {
+					'Content-Type': 'multipart/form-data'
+				},
+				imgupload:false,
 				tags: [
 				{ name: '标签一', type: '' },
 				{ name: '标签二', type: 'success' },
@@ -82,11 +104,67 @@
 				isCollapse:false
 			}
 		},
+		computed:{
+			...mapState(["Picture"])
+		},
 		mounted(){
+			http({
+				method: 'post',
+				url: "/img/download",
+				params:{
+					userCode:localStorage.getItem("userName")
+				},
+				responseType:"blob",
+				}).then((res) => {	
+					let blob = new Blob([res.data],{type:'image/jpeg'})
+					this.currentPicture = URL.createObjectURL(blob)
+					this.$store.state.Picture= this.currentPicture
+				}).catch(() => {
+					this.$store.state.Picture= ""
+					this.$message({
+						type: 'error',
+						message: '您尚未上传过图片，请上传',
+						
+					});
+		})
 			console.log('111',this.$router.options.routes)
 			this.data1=this.$router.options.routes
 		},
 		methods:{
+			uploadimg(){
+					this.imgupload = true;
+				},
+				handleChange(file, fileList) { //文件数量改变
+					this.fileList = fileList;
+				},
+				confirmUpload() { //确认上传
+					let param = new FormData();
+					this.fileList.forEach(
+						(val, index) => {
+							param.append("files", val.raw);
+						}
+					);
+					param.append("userCode",localStorage.getItem("userName"));
+					http({
+						method: 'post',
+						url: "/img/upload",
+						data: param,
+						responseType:"blob",
+						}).then((res) => {	
+							this.$message({
+								type: 'success',
+								message: '上传成功!'
+							});
+							let blob = new Blob([res.data],{type:'image/jpeg'})
+                			this.currentPicture = URL.createObjectURL(blob)
+							this.$store.state.Picture= this.currentPicture
+						}).catch(() => {
+							this.$message({
+								type: 'error',
+								message: '服务器错误'
+							});
+				})
+			},
 			handleOpen(key, keyPath) {
 				console.log(key, keyPath);
 			},
