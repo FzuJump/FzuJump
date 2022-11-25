@@ -64,35 +64,5 @@ public class LoginController {
     }
 
 
-    @GetMapping("/unLogin")
-    public String unLogin(){
-        return "未登录";
-    }
-
-    @ApiOperation("注册")
-    @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "query",name = "usercode", value = "用户账号", required = true, dataType = "String", dataTypeClass = String.class),
-            @ApiImplicitParam(paramType = "query",name = "password", value = "用户密码", required = true, dataType = "String", dataTypeClass = String.class)
-    })
-    @PostMapping("/register")
-    public ResultData register(String userCode,String password){
-        ResultData resultData = new ResultData();
-        User user = userMapper.GetUserBy(null, userCode, null);
-        if(user != null){
-            resultData.setCode(Code.FALISE);
-            resultData.setMsg("用户名重复");
-        }
-        else{
-            User user1 = new User();
-            user1.setUserCode(userCode);
-            user1.setUserName("匿名用户");
-            user1.setRoleId(7);
-            user1.setPassword(bCryptPasswordEncoder.encode(password));
-            userMapper.addUser1(user1);
-            resultData.setCode(Code.SUCCESS);
-            resultData.setMsg("注册成功");
-        }
-        return resultData;
-    }
 
 }

@@ -2,6 +2,8 @@ package com.Ambition.service;
 
 import com.Ambition.dto.ResultData;
 
+import java.util.Map;
+
 public interface ScoreService {
     ResultData GetAllGrades(Integer state);
 
@@ -11,5 +13,9 @@ public interface ScoreService {
 
     ResultData deleteScore(int id);
 
-    ResultData addScore(String userName, String rolename, Integer jumpFrequency, Integer itemNumber);
+    ResultData addScore(String userCode,String userName, String rolename, Integer jumpFrequency, Integer itemNumber);
+
+    Map<String,Object> appGetAllScore(Integer state);
+
+    Map<String,Object> appGetScoreByUserCode(String userCode);
 }

@@ -21,4 +21,6 @@ public interface ScoreMapper {
     List<Score> GetAllScoreBy();
     //成绩数量
     int countScore();
+    //按照账号获取成绩
+    List<Score> GetScoreByUserCode(String userCode);
 }

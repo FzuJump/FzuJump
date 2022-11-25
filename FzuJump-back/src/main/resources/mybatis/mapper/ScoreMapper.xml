@@ -33,12 +33,12 @@
 
     <insert id="addScore" parameterType="com.Ambition.pojo.Score">
         insert into fzujump.score
-        (userName, userRoleId, JumpFrequency, ItemNumber)
-        values (#{userName}, #{userRole},#{JumpFrequency}, #{ItemNumber})
+        (userCode,userName, userRoleId, JumpFrequency, ItemNumber)
+        values (#{userCode},#{userName}, #{userRole},#{JumpFrequency}, #{ItemNumber})
     </insert>
 
     <select id="GetAllScoreBy" resultType="com.Ambition.pojo.Score">
-        select score.id ,score.JumpFrequency, score.userName, score.ItemNumber,rolename from fzujump.score
+        select score.userCode,score.id ,score.JumpFrequency, score.userName, score.ItemNumber,rolename from fzujump.score
         inner join fzujump.role
         on score.userRoleId = role.id
         order by JumpFrequency desc
@@ -47,4 +47,9 @@
     <select id="countScore" resultType="Integer">
         select count(*) from fzujump.score
     </select>
+
+    <select id="GetScoreByUserCode" resultType="com.Ambition.pojo.Score">
+        select * from fzujump.score where userCode = #{userCode}
+    </select>
+
 </mapper>

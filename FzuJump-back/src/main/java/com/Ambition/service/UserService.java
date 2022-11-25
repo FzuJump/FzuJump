@@ -4,6 +4,7 @@ import com.Ambition.dto.ResultData;
 import com.Ambition.pojo.User;
 
 import java.util.List;
+import java.util.Map;
 
 
 public interface UserService {
@@ -23,4 +24,6 @@ public interface UserService {
     ResultData deleteUserList(List<Integer> userIdlist);
 
     void Email(String value ,Integer userId,String email);
+
+    Map<String, Object> appUpdate(String userCode, String password);
 }

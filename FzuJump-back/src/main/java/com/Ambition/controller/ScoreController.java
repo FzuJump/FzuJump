@@ -60,12 +60,13 @@ public class ScoreController {
             @ApiImplicitParam(paramType = "header", name = "token", value = "登录令牌", dataType = "String", dataTypeClass = String.class,required = true),
             @ApiImplicitParam(name = "userName", value = "用户姓名", required = true, dataType = "String", dataTypeClass = String.class),
             @ApiImplicitParam(name = "rolename", value = "角色", required = true, dataType = "String", dataTypeClass = String.class),
+            @ApiImplicitParam(name = "userCode", value = "账号", required = true, dataType = "String", dataTypeClass = String.class),
             @ApiImplicitParam(name = "jumpFrequency", value = "跳跃高度", required = true, dataType = "Integer", dataTypeClass = Integer.class),
             @ApiImplicitParam(name = "itemNumber", value = "拾取道具数", required = true, dataType = "Integer", dataTypeClass = Integer.class)
     })
     @GetMapping("/score/add")
-    public ResultData addScore(String userName, String rolename, Integer jumpFrequency, Integer itemNumber) {
-        return scoreService.addScore(userName, rolename, jumpFrequency, itemNumber);
+    public ResultData addScore(String userCode,String userName, String rolename, Integer jumpFrequency, Integer itemNumber) {
+        return scoreService.addScore(userCode, userName , rolename, jumpFrequency, itemNumber);
     }
 
     @ApiOperation("成绩")

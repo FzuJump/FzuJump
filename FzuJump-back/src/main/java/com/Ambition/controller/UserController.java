@@ -53,12 +53,12 @@ public class UserController {
     @ApiOperation("添加用户")
     @PostMapping("/user/add")
     public ResultData insertUser(@RequestBody User user) {
+        System.out.println(user);
         return userService.insertUser(user);
     }
 
     @PostMapping("/user/update")
     public ResultData updateUser(@RequestBody User user) {
-        System.out.println(user);
         return userService.updateUser(user);
     }
 

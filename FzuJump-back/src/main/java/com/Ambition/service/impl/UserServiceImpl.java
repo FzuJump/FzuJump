@@ -125,6 +125,25 @@ public class UserServiceImpl  implements UserService {
         resultData.setMsg("成功删除" + number + "条数据");
         return resultData;
     }
+
+    public Map<String, Object> appUpdate(String userCode,String password){
+        HashMap<String, Object> map = new HashMap<>();
+        User user = userMapper.GetUserBy(null, userCode, null);
+        if(user == null){
+            map.put("Code",300);
+            map.put("msg","账号错误");
+        }
+        else{
+            BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
+            user.setPassword(bCryptPasswordEncoder.encode(password));
+            userMapper.updateUser(user);
+            map.put("Code",200);
+            map.put("msg","修改成功");
+        }
+        return map;
+    }
+
+
     @Async
     public void Email(String value ,Integer userId,String email){
         mailerService.sendSimpleTextMailActual("福大跳跃",value,new String[]{email},null,null,null);

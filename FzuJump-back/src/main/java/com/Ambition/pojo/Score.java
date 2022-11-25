@@ -12,6 +12,7 @@ import java.util.Date;
 @NoArgsConstructor
 public class Score {
     private int id;
+    private String userCode;
     private String userName;
     private int userRole;
     private int JumpFrequency;

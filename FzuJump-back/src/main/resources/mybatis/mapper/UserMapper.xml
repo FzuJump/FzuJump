@@ -37,7 +37,7 @@
                 id = #{id}
             </if>
             <if test="userCode != null">
-                userCode = #{userCode}
+                usercode = #{userCode}
             </if>
             <if test="password != null">
                 and password = #{password}
@@ -50,13 +50,15 @@
     </delete>
 
     <insert id="addUser" parameterType="com.Ambition.pojo.User">
-        insert into fzujump.user(username,password,roleId) values (#{userName},#{password},#{roleId})
+        insert into fzujump.user(usercode,username,password,roleId,email) values (#{userCode},#{userName},#{password},#{roleId},#{email})
     </insert>
 
     <update id="updateUser" parameterType="com.Ambition.pojo.User">
         UPDATE fzujump.user
         <trim prefix="set" suffixOverrides=",">
             <if test="userName!=null"> username=#{userName},</if>
+            <if test="userCode!=null"> usercode=#{userCode},</if>
+            <if test="email!=null"> email=#{email},</if>
             <if test="password!=null"> password=#{password},</if>
             <if test="roleId!=null"> roleId=#{roleId},</if>
         </trim>

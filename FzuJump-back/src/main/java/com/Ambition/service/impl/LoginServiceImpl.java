@@ -56,7 +56,8 @@ public class LoginServiceImpl implements LoginServcie {
         //返回
         ResultData resultData = new ResultData();
         resultData.setCode(Code.SUCCESS);
-        resultData.setMsg("登录成功");
+//        resultData.setMsg("登录成功");
+        resultData.setMsg(token);
         HashMap<String, String> Map = new HashMap<>();
         Map.put("token",token);
         resultData.setData(Map);
