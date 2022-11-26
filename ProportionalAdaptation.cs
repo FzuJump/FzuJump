@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections;
 
-public class Test : MonoBehaviour {
+public class ProportionalAdaptation : MonoBehaviour {
 
     //基于iPhone13pro/iPhone14比例的单位高度
      float devHeight = 25.32f;
