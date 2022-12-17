@@ -17,17 +17,23 @@
 			</div>
 			</el-card>
 			<div class = "Log">
-            <el-table :data="tableData" stripe border height="403px" style="width: 100%">
-				<el-table-column prop="time" label="时间" width="180px" align = center>
+				<div>
+				<div class="header"  style="font-size: 24px;margin:10px">
+					<span>当前在线列表：</span>
+				</div>
+				<el-table :data="tableData" stripe border height="350px" style="width: 105%;box-shadow: 0 2px 12px 0 rgb(0 0 0 / 10%);">
+				<el-table-column prop="userName" label="姓名" width="180px" align = center>
 				</el-table-column>
-				<el-table-column  prop="message" m label="内容" width="340px" align = center>
+				<el-table-column  prop="role.rolename" m label="角色" width="340px" align = center>
 				</el-table-column>
             </el-table>
+
+			</div>
 			</div> 
 		  </div>
 		</el-col>
 		<el-col :span="14">
-			  <!-- 四个订单信息 -->
+			  <!-- 四个信息 -->
 			<div class="num">
 			<el-card shadow= 'hover' v-for="item in countData" :key="item.name" :body-style="{ display: 'flex',padding: 0 }" class="OrderCard">
 			  	<i class="icon" :class="'el-icon-'+item.icon" :style="{background: item.color, }" style="text-align: center	;"></i>
@@ -73,7 +79,7 @@ import { mapState } from "vuex";
 			value: new Date(),
 			countData:[
 				{
-				name: '角色数量',
+				name: '在线人数',
 				value: 0,
 				icon: 'success',
 				color: '#2ec7c9'
@@ -118,7 +124,7 @@ import { mapState } from "vuex";
 					this.countData[1].value=res.data.data.countUser;
 					this.countData[2].value=res.data.data.countScore;
 					this.countData[3].value=res.data.data.countLog;
-					this.tableData = res.data.data.Log;
+					this.tableData = res.data.data.onlineUser;
 				}
 			}).catch(()=>{
 				this.$message({
